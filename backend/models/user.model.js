@@ -15,6 +15,11 @@ const UserSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  password: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   active: {
     type: Boolean,
     default: true,
@@ -33,6 +38,6 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-const User = mongoose.Model("User", UserSchema);
+const User = mongoose.model("User", UserSchema);
 
 export default User;
