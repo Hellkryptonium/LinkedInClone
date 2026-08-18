@@ -16,3 +16,11 @@ Content-Type: application/json
   "email": "harish@example.com",
   "password": "mypassword"
 }
+
+###
+GET http://localhost:9090/get_user_and_profile
+Content-Type: application/json
+
+{
+  "token": "a3f8cfd6e3dbb40ec2f5d8c0c03231ca9a14e1551140921ba8dc690b4cad47a6"
+}
