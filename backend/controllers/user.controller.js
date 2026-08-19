@@ -25,7 +25,7 @@ export const register = async (req, res) => {
 
         await newUser.save();
 
-        const profile = new Profile({ user: newUser._id });
+        const profile = new Profile({ userId: newUser._id });
         await profile.save();
 
         return res.json({ message: "User registered successfully" })
