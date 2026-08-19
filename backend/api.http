@@ -24,3 +24,30 @@ Content-Type: application/json
 {
   "token": "6fab78e361318a2c594c83c630a1ede15a1ac1b50977aaac8bc5ae7f5e11bd1b"
 }
+
+###
+POST http://localhost:9090/update_profile_data
+Content-Type: application/json
+
+{
+  "token": "6fab78e361318a2c594c83c630a1ede15a1ac1b50977aaac8bc5ae7f5e11bd1b",
+  "bio": "Hello",
+  "currentPost": "CTO",
+  "pastWork": [
+    {
+      "company": "Microsoft",
+      "position": "CTO",
+      "years": "2+"
+    }
+  ],
+  "education": [
+    {
+      "school": "IIT",
+      "degree": "B.Tech",
+      "fieldOfStudy": "2015-2019"
+    }
+  ]
+}
+
+###
+GET http://localhost:9090/user/get_all_users

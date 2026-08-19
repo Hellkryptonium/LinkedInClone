@@ -2,6 +2,13 @@ import User from "../models/user.model.js";
 import Profile from "../models/profile.model.js";
 import bcrypt from "bcrypt";
 import { randomBytes } from "node:crypto";
+import PDFDocument from "pdfkit";
+
+const convertUserDataTOPDF = (userData) => {
+    const doc = new PDFDocument();
+
+    const outputPath = randomBytes(32).toString("hex") + ".pdf";
+}
 
 export const register = async (req, res) => {
     try {
@@ -138,4 +145,55 @@ export const getUserAndProfile = async(req, res) => {
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
+}
+
+export const updateProfileData = async(req, res) => {
+    try {
+
+        const { token, ...newProfileData } = req.body;
+        
+        const userProfile = await User.findOne({ token: token});
+
+        if(!userProfile) {
+            return res.status(404).json({ message: error.message });
+        }
+
+        const profile_to_update = await Profile.findOne({ userId: userProfile._id});
+
+        Object.assign(profile_to_update, newProfileData);
+
+        await profile_to_update.save();
+
+        return res.json({ message: "Profile Updated" });
+
+    } catch(error) {
+        return res.status(500).json({message: error.message});
+    }
+}
+
+export const getAllUserProfile = async(req, res) => {
+
+    try {
+
+        const profiles = await Profile.find().populate('userId', 'name username email profilePicture');
+
+        return res.json({ profiles });
+
+    } catch(error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+export const downloadProfile = async (req, res) => {
+
+    const user_id = req.query.id;
+
+    const userProfile = await Profile.findOne({ userId: user_id })
+        .populate('userId', 'name username email profilePicture');
+
+    let a = await convertUserDataTOPDF(userProfile);
+
+    return res.json({ "message": a})
+
+    
 }
