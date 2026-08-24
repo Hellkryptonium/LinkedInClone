@@ -30,7 +30,7 @@ POST http://localhost:9090/update_profile_data
 Content-Type: application/json
 
 {
-  "token": "6fab78e361318a2c594c83c630a1ede15a1ac1b50977aaac8bc5ae7f5e11bd1b",
+  "token": "d2d250cc0163b40e09f24919bd7b59f1cb43a01db843f1f9540729043c443b62",
   "bio": "Hello",
   "currentPost": "CTO",
   "pastWork": [
