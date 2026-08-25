@@ -219,3 +219,15 @@ export const downloadProfile = async(req, res) => {
 
     return res.json({ "message": outputPath });
 }
+
+export const sendConnectionRequest = async(req, res) => {
+
+    const { token, connectionId } = req.body;
+
+    try {
+
+
+    } catch(err) {
+        return res.status(500).json({ message: err.message });
+    }
+}
