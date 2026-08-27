@@ -18,6 +18,9 @@ Content-Type: application/json
 }
 
 ###
+
+
+###
 GET http://localhost:9090/get_user_and_profile
 Content-Type: application/json
 
@@ -51,3 +54,84 @@ Content-Type: application/json
 
 ###
 GET http://localhost:9090/user/get_all_users
+
+
+###
+POST http://localhost:9090/user/send_connection_request
+Content-Type: application/json
+
+{
+  "token": "3546b084c5d36eb611a1c0922beb14d1a5d45537c5d71cedf67138b0554b9321",
+  "connectionId": "6a855a696018c8a2af39af4b"
+}
+
+###
+GET http://localhost:9090/user/get_connection_requests
+Content-Type: application/json
+
+{
+  "token": "3546b084c5d36eb611a1c0922beb14d1a5d45537c5d71cedf67138b0554b9321"
+}
+
+###
+GET http://localhost:9090/user/user_connection_request
+Content-Type: application/json
+
+{
+  "token": "3546b084c5d36eb611a1c0922beb14d1a5d45537c5d71cedf67138b0554b9321"
+}
+
+###
+POST http://localhost:9090/user/accept_connection_request
+Content-Type: application/json
+
+{
+  "token": "3546b084c5d36eb611a1c0922beb14d1a5d45537c5d71cedf67138b0554b9321",
+  "requestId": "6a909f9a89e54546dd7ec568",
+  "action_type": "accept"
+}
+
+
+### 
+POST http://localhost:9090/delete_post
+Content-Type: application/json
+
+{
+  "token": "525c693e340774140b5f849f187da77d706063545b3fa86710135315406c591b",
+  "post_id": "6a90aafa7e2c740feddbb03a"
+}
+
+###
+POST http://localhost:9090/comment
+Content-Type: application/json
+
+{
+  "token": "525c693e340774140b5f849f187da77d706063545b3fa86710135315406c591b",
+  "post_id": "6a90ab037e2c740feddbb03b",
+  "commentBody": "Nice work"
+}
+
+###
+POST http://localhost:9090/get_comments
+Content-Type: application/json
+
+{
+  "post_id": "6a90ab037e2c740feddbb03b"
+}
+
+###
+DELETE http://localhost:9090/delete_comment
+Content-Type: application/json
+
+{
+  "token": "525c693e340774140b5f849f187da77d706063545b3fa86710135315406c591b",
+  "comment_id": "6a90bce62f18eb5c8522c269"
+}
+
+###
+POST http://localhost:9090/increament_like
+Content-Type: application/json
+
+{
+  "post_id": "6a90ab037e2c740feddbb03b"
+}
