@@ -1,0 +1,12 @@
+.container {
+    font-family: "Poppins";
+    padding: 1.2rem;
+}
+
+.mainContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 2rem;
+    height: 80vh;
+}
