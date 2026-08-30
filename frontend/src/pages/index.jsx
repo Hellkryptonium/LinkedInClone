@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import { useRouter } from "next/router";
+import UserLayout from "@/layout/UserLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,7 +20,7 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <>
+    <UserLayout>
       <div className={styles.container}>
         <div className={styles.mainContainer}>
 
@@ -31,7 +32,7 @@ export default function Home() {
 
             <div onClick={ () => {
               router.push("/login")
-            }} className="buttonJoin">
+            }} className={styles.buttonJoin}>
               <p>Join Now</p>
             </div>
 
@@ -43,6 +44,6 @@ export default function Home() {
 
         </div>
       </div>
-    </>
+    </UserLayout>
   );
 }
