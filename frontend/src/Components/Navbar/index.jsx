@@ -9,7 +9,7 @@ function NavBarComponent() {
   return (
 
 
-    <div classname = {styles.container}>
+    <div className = {styles.container}>
         <nav className={styles.navBar}>
 
             <h1 style={{cursor: "pointer"}} onClick={ () => {
