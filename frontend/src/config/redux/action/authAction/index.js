@@ -6,23 +6,20 @@ export const loginUser = createAsyncThunk(
     "user/login",
     async (user, thunkAPI) => {
         try {
-
-            const response = await clientServer.post('/login', {
-                "email": user.email,
-                "password": user.password
+            const response = await clientServer.post("/login", {
+                email: user.email,
+                password: user.password
             });
 
-            if(response.data.token) {
-                if (typeof window !== "undefined") {
-                    const token = localStorage.getItem("token");
-                }
-            } else {
+            if (!response.data.token) {
                 return thunkAPI.rejectWithValue({
-                    message: "token not provided"
-                })
+                    message: "Token not provided"
+                });
             }
 
-            return thunkAPI.fulfillWithValue(response.data.token);
+            localStorage.setItem("token", response.data.token);
+
+            return response.data.token;
 
         } catch (error) {
             return thunkAPI.rejectWithValue(
@@ -32,11 +29,26 @@ export const loginUser = createAsyncThunk(
             );
         }
     }
-)
+);
 
 export const registerUser = createAsyncThunk(
-    "user/register",
-    async (user, thunkAPI) => {
+  "user/register",
+  async (user, thunkAPI) => {
+    try {
+      const response = await clientServer.post("/register", {
+        username: user.username,
+        password: user.password,
+        email: user.email,
+        name: user.name,
+      });
 
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || {
+          message: err.message || "Something went wrong",
+        }
+      );
     }
-)
+  }
+);
