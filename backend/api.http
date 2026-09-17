@@ -25,7 +25,7 @@ GET http://localhost:9090/get_user_and_profile
 Content-Type: application/json
 
 {
-  "token": "6fab78e361318a2c594c83c630a1ede15a1ac1b50977aaac8bc5ae7f5e11bd1b"
+  "token": "35d5565aa631f0594182968b70ad5423bbff084abe8ef2c69e55406fdfd420f9"
 }
 
 ###
@@ -33,7 +33,7 @@ POST http://localhost:9090/update_profile_data
 Content-Type: application/json
 
 {
-  "token": "d2d250cc0163b40e09f24919bd7b59f1cb43a01db843f1f9540729043c443b62",
+  "token": "35d5565aa631f0594182968b70ad5423bbff084abe8ef2c69e55406fdfd420f9",
   "bio": "Hello",
   "currentPost": "CTO",
   "pastWork": [
@@ -134,4 +134,60 @@ Content-Type: application/json
 
 {
   "post_id": "6a90ab037e2c740feddbb03b"
+}
+
+
+
+#checking
+###
+POST http://localhost:9090/register
+Content-Type: application/json
+
+{
+  "username": "harish1234",
+  "password": "mypassword",
+  "email": "harish1@example.com",
+  "name": "Harish"
+}
+
+###
+POST http://localhost:9090/login
+Content-Type: application/json
+
+{
+  "email": "harish1@example.com",
+  "password": "mypassword"
+}
+
+
+###
+GET http://localhost:9090/get_user_and_profile
+Content-Type: application/json
+
+{
+  "token": "0aafe8402066be57ba40593befa77dfda3ffa57c34c97a8586ecc14bb05efc5e"
+}
+
+###
+POST http://localhost:9090/update_profile_data
+Content-Type: application/json
+
+{
+  "token": "0aafe8402066be57ba40593befa77dfda3ffa57c34c97a8586ecc14bb05efc5e",
+  "bio": "Hello",
+  "currentPost": "CTO",
+  "pastWork": [
+    {
+      "company": "Microsoft",
+      "position": "CTO",
+      "years": "2+"
+    }
+  ],
+  "education": [
+    {
+      "school": "IIT",
+      "degree": "B.Tech",
+      "fieldOfStudy": "2015-2019"
+    }
+  ]
 }

@@ -155,6 +155,7 @@ export const getUserAndProfile = async(req, res) => {
 
         const { token } = req.query;
 
+
         const user = await User.findOne({ token: token });
 
         if (!user) {
@@ -164,7 +165,9 @@ export const getUserAndProfile = async(req, res) => {
         const userProfile = await Profile.findOne({ userId: user._id })
             .populate('userId', 'name email username profilePicture');
 
-        return res.json(userProfile);
+        return res.json({
+            profile: userProfile
+        });
 
 
     } catch (error) {
