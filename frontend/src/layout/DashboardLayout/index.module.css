@@ -9,3 +9,32 @@
 .homeContainer > div:nth-child(even) {
     flex: 0.6;
 }
+
+.homeContainer__leftBar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    align-items: start;
+}
+
+.sideBarOption {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    gap: 1.3rem;
+    width: 80%;
+    min-width: 100px;
+    max-width: 80%;
+    margin: 0 auto;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sideBarOption:hover {
+    transform: scale(1.01);
+}
+
+.sideBarOption > svg {
+    height: 1.4rem;
+    min-width: fit-content;
+}
