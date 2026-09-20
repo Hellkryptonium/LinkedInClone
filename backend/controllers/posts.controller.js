@@ -113,7 +113,7 @@ export const commentPost = async(req, res) => {
 
 export const get_comment_by_post = async (req, res) => {
 
-    const { post_id } = req.body;
+    const { post_id } = req.query;
 
     try {
 
@@ -125,11 +125,13 @@ export const get_comment_by_post = async (req, res) => {
             });
         }
 
-        const comments = await Comment.find({
-            postId: post_id
-        });
+        const comments = await Comment
+		.find({postId: post_id})
+		.populate("userId", "username name");
 
-        return res.json({ comments });
+        return res.json({
+    		comments: comments.reverse()
+		});
 
     } catch (err) {
         return res.status(500).json({
