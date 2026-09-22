@@ -1,0 +1,210 @@
+.container {
+    padding: 1.3rem;
+    background: white;
+}
+
+
+/* ================= COVER ================= */
+
+.backDropContainer {
+    width: 100%;
+    height: 30vh;
+
+    background: url(
+        https://images.pexels.com/photos/545521/pexels-photo-545521.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1
+    );
+
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    position: relative;
+
+    border-radius: 20px;
+}
+
+
+/* ================= PROFILE IMAGE ================= */
+
+.backDropContainer img {
+    width: 10em;
+    height: 10em;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    position: absolute;
+
+    bottom: -30%;
+    left: 8%;
+
+    text-align: center;
+}
+
+
+/* ================= PROFILE DETAILS ================= */
+
+.profileContainer__details {
+    padding-top: 6.6rem;
+
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+}
+
+
+/* ================= LEFT PROFILE INFO ================= */
+
+.profileInfo {
+    width: 70%;
+}
+
+/* NAME + USERNAME */
+
+.nameRow {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 1.2rem;
+}
+
+
+.nameRow h2 {
+
+    margin: 0;
+
+}
+
+
+.nameRow p {
+
+    margin: 0;
+
+    color: grey;
+
+}
+
+
+/* BIO */
+
+.bio {
+
+    margin-top: 0.7rem;
+
+}
+
+
+/* ================= RECENT ACTIVITY ================= */
+
+.recentActivity {
+
+    width: 30%;
+    margin-left: auto;
+}
+
+
+.recentActivity h3 {
+
+    margin-top: 0;
+
+    margin-bottom: 1rem;
+
+}
+
+
+/* ================= POSTS ================= */
+
+.card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 1.4rem;
+
+}
+
+
+.card__profileContainer {
+
+    display: flex;
+
+    flex-shrink: 0;
+}
+
+
+.card__profileContainer > img {
+
+    width: 3.4rem;
+
+    height: 3.4rem;
+
+    object-fit: cover;
+
+    border-radius: 5px;
+}
+
+
+.postCard {
+
+    margin-bottom: 1rem;
+}
+
+
+/* ================= CONNECT BUTTON ================= */
+
+.connectBtn {
+
+    padding-inline: 0.8rem;
+
+    padding-block: 0.3rem;
+
+    background: rgba(
+        3,
+        93,
+        183,
+        0.905
+    );
+
+    outline: none;
+
+    border: none;
+
+    color: white;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    margin-top: 0.5rem;
+}
+
+
+.connectedButton {
+
+    padding-inline: 0.8rem;
+
+    padding-block: 0.3rem;
+
+    border: 1px solid silver;
+
+    outline: none;
+
+    background: rgba(
+        3,
+        93,
+        183,
+        0.905
+    );
+
+    color: white;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    margin-top: 0.5rem;
+}

@@ -33,8 +33,8 @@ POST http://localhost:9090/update_profile_data
 Content-Type: application/json
 
 {
-  "token": "35d5565aa631f0594182968b70ad5423bbff084abe8ef2c69e55406fdfd420f9",
-  "bio": "Hello",
+  "token": "a928d7be3868a0f971c3d8a036d9357222009967796e141379530f0770bce699",
+  "bio": "Hello I am Harish",
   "currentPost": "CTO",
   "pastWork": [
     {
