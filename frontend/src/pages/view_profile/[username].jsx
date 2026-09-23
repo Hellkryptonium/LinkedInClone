@@ -10,6 +10,7 @@ import styles from './index.module.css';
 import { getAllPost } from '@/config/redux/action/postAction';
 import {
   getConnectionRequests,
+  getMyConnectionRequests,
   sendConnectionRequest,
 } from '@/config/redux/action/authAction';
 
@@ -21,15 +22,45 @@ export default function ViewProfilePage({ userProfile }) {
   const postReducer = useSelector((state) => state.postReducer);
   const authState = useSelector((state) => state.auth);
 
-  const isCurrentUserIsConnection = authState.connections.some(
-    (user) => user.connectionId._id === userProfile.userId._id
-  );
+const currentUserId = userProfile?.userId?._id;
 
-  const isConnectionNull =
-    authState.connections.find(
-      (user) =>
-        user.connectionId?._id === userProfile?.userId?._id
-    )?.status_accepted === null;
+const currentConnection =
+  authState.connections.find((connection) => {
+    const userId =
+      typeof connection.userId === "object"
+        ? connection.userId?._id
+        : connection.userId;
+
+    const connectionId =
+      typeof connection.connectionId === "object"
+        ? connection.connectionId?._id
+        : connection.connectionId;
+
+    return (
+      userId === currentUserId ||
+      connectionId === currentUserId
+    );
+  }) ||
+  authState.connectionRequest.find((connection) => {
+    const userId =
+      typeof connection.userId === "object"
+        ? connection.userId?._id
+        : connection.userId;
+
+    const connectionId =
+      typeof connection.connectionId === "object"
+        ? connection.connectionId?._id
+        : connection.connectionId;
+
+    return (
+      userId === currentUserId ||
+      connectionId === currentUserId
+    );
+  });
+
+const connectionStatus = currentConnection?.status_accepted;
+
+
 
   /*
    * Get all posts and connection requests
@@ -42,6 +73,8 @@ export default function ViewProfilePage({ userProfile }) {
         token: localStorage.getItem('token'),
       })
     );
+
+    dispatch(getMyConnectionRequests({token: localStorage.getItem("token")}))
   }, [dispatch]);
 
 
@@ -99,30 +132,32 @@ export default function ViewProfilePage({ userProfile }) {
               {/* CONNECT BUTTON */}
 
               <div style={{display: "flex", alignItems: "center", gap: "1.2rem"}}>
-                {isCurrentUserIsConnection ? (
-                  <button
-                    className={styles.connectedButton}
-                  >
-                    {isConnectionNull ? "Pending" : "Connected"}
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => {
-                      dispatch(
-                        sendConnectionRequest({
-                          token: localStorage.getItem('token'),
-                          user_id: userProfile.userId._id,
-                        })
-                      );
-                    }}
-                    className={styles.connectBtn}
-                  >
-                    Connect
-                  </button>
-                )}
+                {!currentConnection ? (
+                    <button
+                      onClick={() => {
+                        dispatch(
+                          sendConnectionRequest({
+                            token: localStorage.getItem("token"),
+                            user_id: userProfile.userId._id,
+                          })
+                        );
+                      }}
+                      className={styles.connectBtn}
+                    >
+                      Connect
+                    </button>
+                  ) : (
+                    <button className={styles.connectedButton}>
+                      {currentConnection.status_accepted === null
+                        ? "Pending"
+                        : currentConnection.status_accepted === true
+                        ? "Connected"
+                        : "Rejected"}
+                    </button>
+                  )}
 
                 <div onClick={ async () => {
-                  const response = clientServer.get(`/user/download_resume?user_id=${userProfile._id}`);
+                  const response = await clientServer.get(`/user/download_resume?id=${userProfile.userId._id}`);
                   window.open(`${BASE_URL}/${response.data.message}`, "_blank")
                 }} style={{cursor: "pointer"}}> 
                   <svg style={{width: "1.2em", paddingTop: "9px"}} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
