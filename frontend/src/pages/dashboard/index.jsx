@@ -101,7 +101,7 @@ export default function Dashboard() {
 
 
                             <div className={styles.singleCard__image}>
-                              <img src={`${BASE_URL}/${post.media}`} alt="" />
+                             {post.media !== "" ? <img src={`${BASE_URL}/${post.media}`} alt="" /> : <></> } 
 
                             </div>
 

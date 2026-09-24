@@ -7,7 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './index.module.css';
 
-import { getAllPost } from '@/config/redux/action/postAction';
+import {
+  getAllPost
+} from '@/config/redux/action/postAction';
+
 import {
   getConnectionRequests,
   getMyConnectionRequests,
@@ -19,72 +22,137 @@ export default function ViewProfilePage({ userProfile }) {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const postReducer = useSelector((state) => state.postReducer);
-  const authState = useSelector((state) => state.auth);
+  const postReducer = useSelector(
+    (state) => state.postReducer
+  );
 
-const currentUserId = userProfile?.userId?._id;
-
-const currentConnection =
-  authState.connections.find((connection) => {
-    const userId =
-      typeof connection.userId === "object"
-        ? connection.userId?._id
-        : connection.userId;
-
-    const connectionId =
-      typeof connection.connectionId === "object"
-        ? connection.connectionId?._id
-        : connection.connectionId;
-
-    return (
-      userId === currentUserId ||
-      connectionId === currentUserId
-    );
-  }) ||
-  authState.connectionRequest.find((connection) => {
-    const userId =
-      typeof connection.userId === "object"
-        ? connection.userId?._id
-        : connection.userId;
-
-    const connectionId =
-      typeof connection.connectionId === "object"
-        ? connection.connectionId?._id
-        : connection.connectionId;
-
-    return (
-      userId === currentUserId ||
-      connectionId === currentUserId
-    );
-  });
-
-const connectionStatus = currentConnection?.status_accepted;
-
+  const authState = useSelector(
+    (state) => state.auth
+  );
 
 
   /*
-   * Get all posts and connection requests
+   * ================================
+   * CURRENT USER PROFILE
+   * ================================
    */
-  useEffect(() => {
-    dispatch(getAllPost());
 
-    dispatch(
-      getConnectionRequests({
-        token: localStorage.getItem('token'),
-      })
+  const currentUserId =
+    userProfile?.userId?._id;
+
+
+  /*
+   * ================================
+   * FIND CONNECTION
+   * ================================
+   */
+
+  const currentConnection =
+    authState.connections.find((connection) => {
+
+      const userId =
+        typeof connection.userId === 'object'
+          ? connection.userId?._id
+          : connection.userId;
+
+      const connectionId =
+        typeof connection.connectionId === 'object'
+          ? connection.connectionId?._id
+          : connection.connectionId;
+
+      return (
+        userId === currentUserId ||
+        connectionId === currentUserId
+      );
+
+    }) ||
+
+    authState.connectionRequest.find(
+      (connection) => {
+
+        const userId =
+          typeof connection.userId === 'object'
+            ? connection.userId?._id
+            : connection.userId;
+
+        const connectionId =
+          typeof connection.connectionId === 'object'
+            ? connection.connectionId?._id
+            : connection.connectionId;
+
+        return (
+          userId === currentUserId ||
+          connectionId === currentUserId
+        );
+
+      }
     );
 
-    dispatch(getMyConnectionRequests({token: localStorage.getItem("token")}))
+
+  /*
+   * ================================
+   * FETCH DATA
+   * ================================
+   */
+
+  useEffect(() => {
+
+    const token =
+      localStorage.getItem('token');
+
+    dispatch(getAllPost());
+
+    if (token) {
+
+      dispatch(
+        getConnectionRequests({
+          token,
+        })
+      );
+
+      dispatch(
+        getMyConnectionRequests({
+          token,
+        })
+      );
+
+    }
+
   }, [dispatch]);
 
 
+  /*
+   * ================================
+   * USER POSTS
+   * ================================
+   */
+
+  const userPosts =
+    postReducer.posts.filter(
+      (post) =>
+        post.userId?.username ===
+        router.query.username
+    );
+
 
   /*
-   * Get posts belonging to this user
+   * ================================
+   * EDUCATION
+   * ================================
    */
-  const userPosts = postReducer.posts.filter((post) => {
-    return post.userId?.username === router.query.username;
-  });
+
+  const education =
+    userProfile?.education || [];
+
+
+  /*
+   * ================================
+   * WORK HISTORY
+   * ================================
+   */
+
+  const pastWork =
+    userProfile?.pastWork || [];
 
 
   return (
@@ -92,11 +160,25 @@ const connectionStatus = currentConnection?.status_accepted;
 
       <DashboardLayout>
 
-        <div className={styles.container}>
+        <div
+          className={styles.container}
+        >
 
-          {/* ================= COVER ================= */}
+          {/* ================================= */}
+          {/* COVER */}
+          {/* ================================= */}
 
-          <div className={styles.backDropContainer}>
+          <div
+            className={styles.backDropContainer}
+            style={{
+                backgroundImage: `url(${
+                    BASE_URL
+                }/${
+                    userProfile.userId.banner ||
+                    'default-banner.jpg'
+                })`
+            }}
+        >
 
             <img
               className={styles.backDrop}
@@ -107,79 +189,187 @@ const connectionStatus = currentConnection?.status_accepted;
           </div>
 
 
-          {/* ================= PROFILE DETAILS ================= */}
+          {/* ================================= */}
+          {/* PROFILE DETAILS */}
+          {/* ================================= */}
 
-          <div className={styles.profileContainer__details}>
+          <div
+            className={
+              styles.profileContainer__details
+            }
+          >
 
-
+            {/* ================================= */}
             {/* LEFT SIDE */}
+            {/* ================================= */}
 
-            <div className={styles.profileInfo}>
+            <div
+              className={
+                styles.profileInfo
+              }
+            >
 
-              <div className={styles.nameRow}>
+              <div
+                className={
+                  styles.nameRow
+                }
+              >
 
                 <h2>
                   {userProfile.userId.name}
                 </h2>
 
                 <p>
-                  @{userProfile.userId.username}
+                  @
+                  {userProfile.userId.username}
                 </p>
 
               </div>
 
 
-              {/* CONNECT BUTTON */}
+              {/* ================================= */}
+              {/* CONNECTION + RESUME */}
+              {/* ================================= */}
 
-              <div style={{display: "flex", alignItems: "center", gap: "1.2rem"}}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1.2rem',
+                }}
+              >
+
                 {!currentConnection ? (
-                    <button
-                      onClick={() => {
-                        dispatch(
-                          sendConnectionRequest({
-                            token: localStorage.getItem("token"),
-                            user_id: userProfile.userId._id,
-                          })
-                        );
-                      }}
-                      className={styles.connectBtn}
-                    >
-                      Connect
-                    </button>
-                  ) : (
-                    <button className={styles.connectedButton}>
-                      {currentConnection.status_accepted === null
-                        ? "Pending"
-                        : currentConnection.status_accepted === true
-                        ? "Connected"
-                        : "Rejected"}
-                    </button>
-                  )}
 
-                <div onClick={ async () => {
-                  const response = await clientServer.get(`/user/download_resume?id=${userProfile.userId._id}`);
-                  window.open(`${BASE_URL}/${response.data.message}`, "_blank")
-                }} style={{cursor: "pointer"}}> 
-                  <svg style={{width: "1.2em", paddingTop: "9px"}} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                  <button
+                    onClick={() => {
+
+                      dispatch(
+                        sendConnectionRequest({
+                          token:
+                            localStorage.getItem(
+                              'token'
+                            ),
+
+                          user_id:
+                            userProfile.userId._id,
+                        })
+                      );
+
+                    }}
+                    className={
+                      styles.connectBtn
+                    }
+                  >
+                    Connect
+                  </button>
+
+                ) : (
+
+                  <button
+                    className={
+                      styles.connectedButton
+                    }
+                  >
+
+                    {
+                      currentConnection
+                        .status_accepted ===
+                      null
+                        ? 'Pending'
+                        : currentConnection
+                            .status_accepted ===
+                          true
+                        ? 'Connected'
+                        : 'Rejected'
+                    }
+
+                  </button>
+
+                )}
+
+
+                {/* ================================= */}
+                {/* DOWNLOAD RESUME */}
+                {/* ================================= */}
+
+                <div
+                  onClick={async () => {
+
+                    try {
+
+                      const response =
+                        await clientServer.get(
+                          `/user/download_resume?id=${userProfile.userId._id}`
+                        );
+
+                      window.open(
+                        `${BASE_URL}/${response.data.message}`,
+                        '_blank'
+                      );
+
+                    } catch (error) {
+
+                      console.error(
+                        'Resume download failed:',
+                        error
+                      );
+
+                    }
+
+                  }}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                >
+
+                  <svg
+                    style={{
+                      width: '1.2em',
+                      paddingTop: '9px',
+                    }}
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                  >
+
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+                    />
+
                   </svg>
+
                 </div>
 
               </div>
 
 
+              {/* ================================= */}
               {/* BIO */}
+              {/* ================================= */}
 
-              <p className={styles.bio}>
+              <p
+                className={styles.bio}
+              >
                 {userProfile.bio}
               </p>
 
             </div>
 
 
-            {/* RIGHT SIDE - RECENT ACTIVITY */}
+            {/* ================================= */}
+            {/* RECENT ACTIVITY */}
+            {/* ================================= */}
 
-            <div className={styles.recentActivity}>
+            <div
+              className={
+                styles.recentActivity
+              }
+            >
 
               <h3>
                 Recent Activity
@@ -192,11 +382,16 @@ const connectionStatus = currentConnection?.status_accepted;
 
                   <div
                     key={post._id}
-                    className={styles.postCard}
+                    className={
+                      styles.postCard
+                    }
                   >
 
-                    <div className={styles.card}>
-
+                    <div
+                      className={
+                        styles.card
+                      }
+                    >
 
                       {/* POST MEDIA */}
 
@@ -245,26 +440,166 @@ const connectionStatus = currentConnection?.status_accepted;
 
           </div>
 
-          <div className={styles.workHistory}>
 
-              <h4>Work History</h4>
+          {/* ================================= */}
+          {/* WORK HISTORY */}
+          {/* ================================= */}
 
-              <div className={styles.workHistoryContainer}>
+          <div
+            className={
+              styles.workHistory
+            }
+          >
 
-                {
-                  userProfile.pastWork.map((work, index) => {
+            <h4>
+              Work History
+            </h4>
+
+            <div
+              className={
+                styles.workHistoryContainer
+              }
+            >
+
+              {pastWork.length === 0 ? (
+
+                <p>
+                  No work experience added.
+                </p>
+
+              ) : (
+
+                pastWork.map(
+                  (work, index) => {
+
                     return (
-                      <div key={index} className={styles.workHistoryCard}>
-                        <p style={{fontWeight: "bold", display: "flex", alignItems: "center", gap: "0.8rem"}}>
-                          {work.company} - {work.position}
-                        </p>
-                        <p>{work.years}</p>
-                      </div>
-                    )
-                  })
-                }
 
-              </div>
+                      <div
+                        key={index}
+                        className={
+                          styles.workHistoryCard
+                        }
+                      >
+
+                        <p
+                          style={{
+                            fontWeight:
+                              'bold',
+                            display:
+                              'flex',
+                            alignItems:
+                              'center',
+                            gap:
+                              '0.8rem',
+                          }}
+                        >
+                          {work.company}
+                          {' - '}
+                          {work.position}
+                        </p>
+
+                        <p>
+                          {work.years}
+                        </p>
+
+                      </div>
+
+                    );
+
+                  }
+                )
+
+              )}
+
+            </div>
+
+          </div>
+
+
+          {/* ================================= */}
+          {/* EDUCATION */}
+          {/* ================================= */}
+
+          <div
+            className={
+              styles.workHistory
+            }
+          >
+
+            <h4>
+              Education
+            </h4>
+
+            <div
+              className={
+                styles.workHistoryContainer
+              }
+            >
+
+              {education.length === 0 ? (
+
+                <p>
+                  No education added.
+                </p>
+
+              ) : (
+
+                education.map(
+                  (educationItem, index) => {
+
+                    return (
+
+                      <div
+                        key={index}
+                        className={
+                          styles.workHistoryCard
+                        }
+                      >
+
+                        {/* SCHOOL */}
+
+                        <p
+                          style={{
+                            fontWeight:
+                              'bold',
+                            display:
+                              'flex',
+                            alignItems:
+                              'center',
+                            gap:
+                              '0.8rem',
+                          }}
+                        >
+                          {
+                            educationItem.school
+                          }
+                        </p>
+
+
+                        {/* DEGREE */}
+
+                        <p>
+                          {
+                            educationItem.degree
+                          }
+
+                          {' - '}
+
+                          {
+                            educationItem.fieldOfStudy
+                          }
+                        </p>
+
+                      </div>
+
+                    );
+
+                  }
+                )
+
+              )}
+
+            </div>
 
           </div>
 
@@ -281,34 +616,40 @@ const connectionStatus = currentConnection?.status_accepted;
  * ================= SERVER SIDE PROPS =================
  */
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(
+  context
+) {
 
-  console.log('from view');
+  try {
 
-  console.log(
-    context.query.username
-  );
+    const request =
+      await clientServer.get(
+        '/user/get_profile_based_on_username',
+        {
+          params: {
+            username:
+              context.query.username,
+          },
+        }
+      );
 
+    return {
+      props: {
+        userProfile:
+          request.data.profile,
+      },
+    };
 
-  const request =
-    await clientServer.get(
-      '/user/get_profile_based_on_username',
-      {
-        params: {
-          username: context.query.username,
-        },
-      }
+  } catch (error) {
+
+    console.error(
+      'Failed to fetch profile:',
+      error
     );
 
+    return {
+      notFound: true,
+    };
 
-  console.log(
-    request.data
-  );
-
-
-  return {
-    props: {
-      userProfile: request.data.profile,
-    },
-  };
+  }
 }

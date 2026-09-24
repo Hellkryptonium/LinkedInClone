@@ -13,10 +13,6 @@
     width: 100%;
     height: 30vh;
 
-    background: url(
-        https://images.pexels.com/photos/545521/pexels-photo-545521.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1
-    );
-
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -293,4 +289,116 @@
     padding-block: 9px;
     font-family: "Poppins" !important;
     font-size: 1.1rem;
+}
+
+.addWorkButton {
+    padding-inline: 1.3rem;
+    background: white;
+    border:1px dotted silver ;
+    border-radius: 10px;
+    padding-block: 1.2rem;
+    cursor: pointer;
+}
+
+.commentsContainer {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    background: rgb(0,0,0,0.7);
+    overflow: hidden;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+.allCommentsContainer {
+    width: 40vw;
+    height: fit-content;
+    background: white;
+    border-radius: 10px;
+    position: relative;
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.postCommentContainer {
+    position: absolute;
+    bottom: 1.2rem;
+    left: 1.2rem;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+}
+
+.postCommentContainer > input {
+    flex: 0.9;
+    padding-inline: 1.5rem;
+    padding-block: 1.2rem;
+    border: none;
+    outline: none;
+    background-color: rgb(228, 228, 228);
+    border-radius: 10px;
+}
+
+.postCommentContainer > input:focus {
+    border: 1px solid silver;
+}
+
+.postCommentContainer__commentBtn {
+    flex: 0.1;
+    width: fit-content;
+    padding: 1.2rem;
+    background: rgb(61, 79, 177);
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+}
+
+.inputField {
+            padding-inline: 1.3rem;
+            padding-block: 0.8rem;
+            outline: none;
+            border-radius: 10px;
+            border: 1px solid silver;
+            width: 100%;
+        }
+
+
+.bannerEdit {
+    position: absolute;
+
+    top: 1rem;
+    right: 1rem;
+
+    padding: 0.5rem 1rem;
+
+    background: rgba(0, 0, 0, 0.65);
+
+    color: white;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    z-index: 3;
+
+    opacity: 0;
+
+    transition: all 0.3s ease;
+}
+
+.backDropContainer:hover .bannerEdit {
+    opacity: 1;
+}
+
+.bannerEdit p {
+    margin: 0;
 }

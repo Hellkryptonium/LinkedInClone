@@ -28,6 +28,22 @@ const convertUserDataTOPDF = (userData) => {
         doc.fontSize(14).text(`Years: ${work.years}`);
     });
 
+    doc.fontSize(14).text("Education:");
+
+    userData.education.forEach((education) => {
+        doc.fontSize(14).text(
+            `School: ${education.school}`
+        );
+
+        doc.fontSize(14).text(
+            `Degree: ${education.degree}`
+        );
+
+        doc.fontSize(14).text(
+            `Field of Study: ${education.fieldOfStudy}`
+        );
+    });
+
     doc.end();
 
     return outputPath;
@@ -163,7 +179,7 @@ export const getUserAndProfile = async(req, res) => {
         }
 
         const userProfile = await Profile.findOne({ userId: user._id })
-            .populate('userId', 'name email username profilePicture');
+            .populate('userId', 'name email username profilePicture banner');
 
         return res.json({
             profile: userProfile
@@ -203,7 +219,7 @@ export const getAllUserProfile = async(req, res) => {
 
     try {
 
-        const profiles = await Profile.find().populate('userId', 'name username email profilePicture');
+        const profiles = await Profile.find().populate('userId', 'name username email profilePicture banner');
 
         return res.json({ profiles });
 
@@ -361,7 +377,7 @@ export const getUserProfileAndUserBasedOnUsername = async (req, res) => {
         }
 
         const userProfile = await Profile.findOne({ userId: user._id })
-            .populate('userId', 'name username email profilePicture');
+            .populate('userId', 'name username email profilePicture banner');
 
 
         return res.json({ "profile": userProfile });
@@ -372,3 +388,42 @@ export const getUserProfileAndUserBasedOnUsername = async (req, res) => {
 
     }
 }
+
+export const uploadBanner = async (req, res) => {
+
+    const { token } = req.body;
+
+    try {
+
+        const user = await User.findOne({
+            token: token
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        if (!req.file) {
+            return res.status(400).json({
+                message: "No banner image provided"
+            });
+        }
+
+        user.banner = req.file.filename;
+
+        await user.save();
+
+        return res.json({
+            message: "Banner updated"
+        });
+
+    } catch (error) {
+
+        return res.status(500).json({
+            message: error.message
+        });
+
+    }
+};
