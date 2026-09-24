@@ -26,7 +26,9 @@ function NavBarComponent() {
                 
                 {authState.profileFetched && <div>
                     
-                    <div style={{display: "flex", gap: "1.2rem"}}>
+                    <div onClick={() => {
+                        router.push("/profile");
+                    }} style={{display: "flex", gap: "1.2rem", cursor: "pointer"}}>
                         <p>Hey , {authState.user.userId.name}</p>
                         <p style={{fontWeight: "bold", cursor: "pointer"}}>Profile</p>
 
